@@ -1,0 +1,36 @@
+version: '1.0'
+services:
+  frontend:
+    container_name: frontend  
+    build: ./frontend
+    ports: 
+      - 80:80
+    working_dir: /app-frontend
+  backend:
+    container_name: backend
+    build: ./backend
+    ports: 
+      - 8080:8080
+    working_dir: /app-backend
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+  db:
+    container_name: db
+    image: mysql:5.7
+    ports: 
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 3
