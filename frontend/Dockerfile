@@ -1,15 +1,15 @@
-FROM node:23-alpine3.19
+# FROM node:23-alpine3.19
 
-WORKDIR /app-frontend
+# WORKDIR /app-frontend
 
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN npm install
+# RUN npm install
 
-COPY . .
+# COPY . .
 
-EXPOSE 80
+# EXPOSE 80
 
-ENTRYPOINT ["npm", "run"]
+# ENTRYPOINT ["npm", "run"]
 
-CMD ["start"]
+# CMD ["start"]
