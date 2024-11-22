@@ -1,5 +1,7 @@
 FROM node:23-alpine3.19
 
+RUN apk add --no-cache netcat-openbsd
+
 WORKDIR /app-backend
 
 COPY package*.json ./
@@ -10,6 +12,4 @@ COPY . .
 
 EXPOSE 8080
 
-ENTRYPOINT ["npm", "run"]
-
-CMD ["start"]
+CMD /bin/sh -c "while ! nc -z db 5432; do sleep 1; done; npm run start:dev"

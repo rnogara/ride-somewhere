@@ -1,3 +1,7 @@
+networks:
+  app_network:
+    driver: bridge
+
 services:
   # frontend:
   #   container_name: frontend  
@@ -5,6 +9,10 @@ services:
   #   ports: 
   #     - 80:80
   #   working_dir: /app-frontend
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - app_network
   backend:
     container_name: backend
     build: ./backend
@@ -13,6 +21,8 @@ services:
     working_dir: /app-backend
     depends_on:
       - db
+    networks:
+      - app_network
   db:
     container_name: database
     image: postgres:17.1-alpine3.20
@@ -23,15 +33,5 @@ services:
       POSTGRES_DB: "postgres"
     ports:
       - 5432:5432
-
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    container_name: nest-pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=password
-    ports:
-      - '5050:5050'
-    depends_on:
-      - db
+    networks:
+      - app_network
