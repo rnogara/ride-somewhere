@@ -2,13 +2,13 @@ import { Driver } from 'src/database/entities/driver.entity';
 import { User } from 'src/database/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-@Entity()
+@Entity('ride')
 export class Ride {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => User, (user) => user.id)
-  customerId: number;
+  customer: number;
 
   @Column()
   origin: string;
@@ -22,7 +22,7 @@ export class Ride {
   @Column()
   duration: number;
 
-  @ManyToOne(() => Driver, (driver) => driver.id)
+  @ManyToOne(() => Driver, (driver) => driver)
   driver: {
     id: number;
     name: string;

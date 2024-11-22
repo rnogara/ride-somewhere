@@ -16,6 +16,9 @@ export class DriversService {
   }
 
   async findAll() {
-    return await this.driversRepository.find();
+    const drivers = await this.driversRepository.find({
+      select: ['id', 'name', 'description', 'car', 'rating', 'fee', 'minKm'],
+    });
+    return drivers;
   }
 }

@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: 'password',
         database: 'postgres',
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
         entities: [__dirname + '/entities/*.entity.{js,ts}'],
         logging: true,
       }),
