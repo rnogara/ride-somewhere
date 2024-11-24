@@ -31,6 +31,10 @@ export class DriversService {
     return drivers;
   }
 
+  async findOne(id: number): Promise<Driver> {
+    return await this.driversRepository.findOneBy({ id });
+  }
+
   async delete(id: number) {
     return await this.driversRepository.delete(id);
   }

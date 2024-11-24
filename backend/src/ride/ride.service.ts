@@ -8,6 +8,7 @@ import { EstimateResponseDto, EstimateRideDto } from './dto/estimate-ride.dto';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { DriversService } from 'src/drivers/drivers.service';
+import { CustomerRidesResponseDto } from './dto/customer-rides.dto';
 
 @Injectable()
 export class RideService {
@@ -23,7 +24,17 @@ export class RideService {
   }
 
   async create(createRideDto: CreateRideDto): Promise<Ride> {
-    return await this.rideRepository.save(createRideDto);
+    const ride = {
+      customer_id: createRideDto.customer_id,
+      origin: createRideDto.origin,
+      destination: createRideDto.destination,
+      distance: createRideDto.distance,
+      duration: createRideDto.duration,
+      driver_id: createRideDto.driver.id,
+      value: createRideDto.value,
+      date: new Date(),
+    };
+    return await this.rideRepository.save(ride);
   }
 
   async estimate(
@@ -65,7 +76,7 @@ export class RideService {
     }
 
     for (const driver of drivers) {
-      if (driver.min_km >= googleResponse['distance'] / 1000) {
+      if (driver.min_km <= googleResponse['distance'] / 1000) {
         options.push({
           id: driver.id,
           name: driver.name,
@@ -85,16 +96,48 @@ export class RideService {
       destination: googleResponse['destination'],
       distance: googleResponse['distance'],
       duration: googleResponse['duration'],
-      options,
+      options: options.sort((a, b) => a.value - b.value),
       routeResponse: googleResponse['routeResponse'],
     };
   }
 
-  async findAll(): Promise<Ride[]> {
-    return await this.rideRepository.find();
-  }
+  async findAll(
+    id: string,
+    driver_id?: number,
+  ): Promise<CustomerRidesResponseDto> {
+    const rides = [];
+    const drivers = await this.driversService.findAll();
 
-  async findOne(id: number): Promise<Ride> {
-    return await this.rideRepository.findOneBy({ id });
+    const foundRides = await this.rideRepository.find({
+      where: {
+        customer_id: id,
+        ...(driver_id && { driver_id }),
+      },
+    });
+    if (foundRides.length === 0) {
+      return null;
+    }
+
+    foundRides.forEach((ride) => {
+      const driver = drivers.find((driver) => driver.id === ride.driver_id);
+      rides.push({
+        id: ride.id,
+        date: ride.date,
+        origin: ride.origin,
+        destination: ride.destination,
+        distance: ride.distance,
+        duration: ride.duration,
+        driver: {
+          id: driver.id,
+          name: driver.name,
+        },
+        value: ride.value,
+      });
+    });
+
+    return {
+      customer_id: id,
+      rides,
+    };
   }
 }

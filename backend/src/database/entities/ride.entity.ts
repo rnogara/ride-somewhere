@@ -1,14 +1,12 @@
-import { Driver } from 'src/database/entities/driver.entity';
-import { User } from 'src/database/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('ride')
 export class Ride {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
-  customer: number;
+  @Column()
+  customer_id: string;
 
   @Column()
   origin: string;
@@ -20,14 +18,14 @@ export class Ride {
   distance: number;
 
   @Column()
-  duration: number;
+  duration: string;
 
-  @ManyToOne(() => Driver, (driver) => driver)
-  driver: {
-    id: number;
-    name: string;
-  };
+  @Column()
+  driver_id: number;
 
   @Column()
   value: number;
+
+  @Column()
+  date: Date;
 }

@@ -1,5 +1,5 @@
 export class EstimateRideDto {
-  customerId: number;
+  customer_id: string;
   origin: string;
   destination: string;
 }

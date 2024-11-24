@@ -17,15 +17,14 @@ CREATE TABLE IF NOT EXISTS drivers (
 
 CREATE TABLE IF NOT EXISTS ride (
   id SERIAL PRIMARY KEY,
-  customer INTEGER NOT NULL,
+  customer_id VARCHAR(255) NOT NULL,
   origin VARCHAR(255) NOT NULL,
   destination VARCHAR(255) NOT NULL,
   distance INTEGER NOT NULL,
-  duration INTEGER NOT NULL,
-  drivers_id INTEGER NOT NULL,
+  duration VARCHAR(255) NOT NULL,
+  driver_id INTEGER NOT NULL,
   value DECIMAL(10, 2) NOT NULL,
-  FOREIGN KEY ("customer") REFERENCES "users"("id") ON DELETE CASCADE,
-  FOREIGN KEY ("drivers_id") REFERENCES "drivers"("id") ON DELETE CASCADE
+  date DATE NOT NULL
 );
 
 INSERT INTO drivers ("name", "description", "vehicle", "review_rating", "review_comment", "fee", "min_km") VALUES
