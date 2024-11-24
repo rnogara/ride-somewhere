@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD /bin/sh -c "while ! nc -z db 5432; do sleep 1; done; npm run start:dev"
+CMD /bin/sh -c "while ! nc -z db 5432; do sleep 2; done; npm run start:dev"

@@ -23,6 +23,8 @@ services:
       - db
     networks:
       - app_network
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
   db:
     container_name: database
     image: postgres:17.1-alpine3.20
@@ -37,3 +39,8 @@ services:
       - 5432:5432
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

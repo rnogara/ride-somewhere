@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RidesModule } from './rides/rides.module';
+import { RidesModule } from './ride/ride.module';
 import { UsersModule } from './users/users.module';
 import { DriversModule } from './drivers/drivers.module';
-import { DatabaseModule } from './database/db.module';
+import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({

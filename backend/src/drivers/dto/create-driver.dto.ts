@@ -2,7 +2,10 @@ export class CreateDriverDto {
   name: string;
   description: string;
   car: string;
-  rating: string;
+  review: {
+    rating: number;
+    comment: string;
+  };
   fee: number;
-  minKm: number;
+  min_km: number;
 }

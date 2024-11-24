@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('driver')
+@Entity('drivers')
 export class Driver {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,14 +12,17 @@ export class Driver {
   description: string;
 
   @Column()
-  car: string;
+  vehicle: string;
 
-  @Column()
-  rating: string;
+  @Column({ name: 'review_rating', type: 'integer' })
+  review_rating: number;
 
-  @Column()
+  @Column({ name: 'review_comment', type: 'text' })
+  review_comment: string;
+
+  @Column({ name: 'fee', type: 'decimal', precision: 10, scale: 2 })
   fee: number;
 
-  @Column()
-  minKm: number;
+  @Column({ name: 'min_km', type: 'integer' })
+  min_km: number;
 }

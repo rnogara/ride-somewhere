@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Driver } from './entities/driver.entity';
+import { Ride } from './entities/ride.entity';
 
 @Module({
   imports: [
@@ -13,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: 'postgres',
         autoLoadEntities: true,
         synchronize: false,
-        entities: [__dirname + '/entities/*.entity.{js,ts}'],
+        entities: [User, Driver, Ride],
         logging: true,
       }),
     }),

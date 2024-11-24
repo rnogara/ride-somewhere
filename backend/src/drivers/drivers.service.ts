@@ -17,8 +17,21 @@ export class DriversService {
 
   async findAll() {
     const drivers = await this.driversRepository.find({
-      select: ['id', 'name', 'description', 'car', 'rating', 'fee', 'minKm'],
+      select: [
+        'id',
+        'name',
+        'description',
+        'vehicle',
+        'review_rating',
+        'review_comment',
+        'fee',
+        'min_km',
+      ],
     });
     return drivers;
+  }
+
+  async delete(id: number) {
+    return await this.driversRepository.delete(id);
   }
 }
