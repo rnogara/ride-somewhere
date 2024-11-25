@@ -1,9 +1,24 @@
-import Heading from "./components/ui/Heading";
+'use client';
+import { useEffect, useState } from "react";
+import Header from "./components/layout/Header";
+import HomePage from "./components/layout/HomePage";
 
 export default function Home() {
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        setUserId(userId);
+      }
+    }
+  }, []);
+
   return (
-    <div className="bg-black">
-      <Heading level={1} className="text-white">Hello World</Heading>
-    </div>
+    <main className="w-full min-h-svh h-fit">
+      <Header userId={userId} />
+      <HomePage userId={userId} />
+    </main>
   );
 }
