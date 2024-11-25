@@ -1,36 +1,46 @@
-version: '1.0'
+networks:
+  app_network:
+    driver: bridge
+
 services:
-  frontend:
-    container_name: frontend  
-    build: ./frontend
-    ports: 
-      - 80:80
-    working_dir: /app-frontend
+  # frontend:
+  #   container_name: frontend  
+  #   build: ./frontend
+  #   ports: 
+  #     - 80:80
+  #   working_dir: /app-frontend
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - app_network
   backend:
     container_name: backend
     build: ./backend
     ports: 
       - 8080:8080
     working_dir: /app-backend
-    volumes:
-      - ./backend:/app
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+    networks:
+      - app_network
     environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=password
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
   db:
-    container_name: db
-    image: mysql:5.7
-    ports: 
-      - 3306:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
+    container_name: database
+    image: postgres:17.1-alpine3.20
     restart: always
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "postgres"
+    ports:
+      - 5432:5432
+    networks:
+      - app_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 3
+      test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
