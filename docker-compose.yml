@@ -3,16 +3,16 @@ networks:
     driver: bridge
 
 services:
-  # frontend:
-  #   container_name: frontend  
-  #   build: ./frontend
-  #   ports: 
-  #     - 80:80
-  #   working_dir: /app-frontend
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app_network
+  frontend:
+    container_name: frontend  
+    build: ./frontend
+    ports: 
+      - 80:80
+    working_dir: /app-frontend
+    depends_on:
+      - backend
+    networks:
+      - app_network
   backend:
     container_name: backend
     build: ./backend
