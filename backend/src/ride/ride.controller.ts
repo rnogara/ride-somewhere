@@ -22,6 +22,12 @@ export class RideController {
 
   @Post('confirm')
   async create(@Body() createRideDto: CreateRideDto, @Res() res: Response) {
+    if (createRideDto.origin === createRideDto.destination) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        error_code: 'INVALID_DATA',
+        error_description: 'A origem e a destinação devem ser diferentes',
+      });
+    }
     const driver = await this.driversService.findOne(createRideDto.driver.id);
     if (!driver) {
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -53,17 +59,31 @@ export class RideController {
     @Body() estimateRideDto: EstimateRideDto,
     @Res() res: Response,
   ) {
+    if (estimateRideDto.origin === estimateRideDto.destination) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        error_code: 'INVALID_DATA',
+        error_description: 'A origem e a destinação devem ser diferentes',
+      });
+    }
     try {
       const estimate = await this.rideService.estimate(estimateRideDto);
       return res.status(HttpStatus.OK).json(estimate);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      return res.status(HttpStatus.BAD_REQUEST).json({
-        error_code: 'INVALID_DATA',
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        error_code: 'INTERNAL_SERVER_ERROR',
         error_description:
-          'Os dados fornecidos no corpo da requisição são inválidos',
+          'O servidor encontrou um erro interno ao processar a requisição',
       });
     }
+  }
+
+  @Get()
+  async notARoute(@Res() res: Response) {
+    return res.status(HttpStatus.BAD_REQUEST).json({
+      error_code: 'INVALID_DATA',
+      error_description: 'Precisa ser fornecido um ID de cliente válido',
+    });
   }
 
   @Get(':id')
@@ -72,6 +92,12 @@ export class RideController {
     @Res() res: Response,
     @Query('driver_id') driver_id?: string,
   ) {
+    if (!id) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        error_code: 'INVALID_DATA',
+        error_description: 'Precisa ser fornecido um ID de cliente válido',
+      });
+    }
     if (driver_id) {
       const driver = await this.driversService.findOne(+driver_id);
       if (!driver) {
@@ -81,7 +107,7 @@ export class RideController {
         });
       }
     }
-    const rides = await this.rideService.findAll(id, +driver_id);
+    const rides = await this.rideService.findAll(id.toString(), +driver_id);
     if (!rides) {
       return res.status(HttpStatus.NOT_FOUND).json({
         error_code: 'NO_RIDES_FOUND',
