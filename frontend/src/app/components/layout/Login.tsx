@@ -37,7 +37,7 @@ export default function Login() {
 	return (
 		<Dialog>
 			<DialogTrigger className="bg-transparent hover:underline text-white text-2xl">Login</DialogTrigger>
-			<DialogContent className="bg-white/10 border border-black">
+			<DialogContent className="bg-zinc-900 border border-black">
 				<DialogHeader>
 					<DialogTitle className="text-white font-semibold">Login</DialogTitle>
 					<DialogClose />
