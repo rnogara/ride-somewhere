@@ -5,7 +5,10 @@ networks:
 services:
   frontend:
     container_name: frontend  
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     ports: 
       - 80:80
     working_dir: /app-frontend
@@ -14,7 +17,7 @@ services:
     networks:
       - app_network
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY}
   backend:
     container_name: backend
     build: ./backend
@@ -38,7 +41,7 @@ services:
       POSTGRES_PASSWORD: "password"
       POSTGRES_DB: "postgres"
     ports:
-      - 5432:5432
+      - 5433:5432
     networks:
       - app_network
     healthcheck:

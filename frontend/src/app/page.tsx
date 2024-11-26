@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <main className="w-full min-h-svh h-fit">
       <Header userId={userId} />
-      <HomePage userId={userId} />
+      <HomePage />
     </main>
   );
 }
