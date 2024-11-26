@@ -1,7 +1,7 @@
-export default function History() {
+export default function History({ customerId }: { customerId: string }) {
 	return (
 		<div>
-			Enter
+			{customerId}
 		</div>
 	);
 }

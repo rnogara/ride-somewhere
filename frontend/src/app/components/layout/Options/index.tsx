@@ -1,19 +1,22 @@
 import { Driver } from "@/app/types/driver.type";
-import DriverCard from "./DriverCard";
+import Confirm from "./Confirm";
 
 type Props = {
 	origin: string,
 	destination: string,
 	options: Driver[],
+	customerId: string,
+	distance: number,
+	duration: string
 }
 
-export default function Options({ origin, destination, options }: Props) {
+export default function Options({ origin, destination, options, customerId, distance, duration }: Props) {
 	const originUrl = origin.replace(" ", "+").replace(",", "").replace(".", "").replace("-", "");
 	const destinationUrl = destination.replace(" ", "+");
 	const url = "https://www.google.com/maps/embed/v1/directions?key=" + process.env.NEXT_PUBLIC_GOOGLE_API_KEY + "&origin=" + originUrl + "&destination=" + destinationUrl;
 	return (
 
-		<div>
+		<div className="w-full flex flex-col items-center gap-10">
 			{origin.length > 0 && destination.length > 0 &&
 				<iframe
 					width="760"
@@ -24,8 +27,14 @@ export default function Options({ origin, destination, options }: Props) {
 					allowFullScreen>
 				</iframe>
 			}
-			{options.length > 0 && options.map((option, index) => <div key={index} className="w-full flex justify-between px-20 py-5">{
-				<DriverCard option={option} />}</div>)}
+			<Confirm
+				options={options}
+				customerId={customerId}
+				origin={origin}
+				destination={destination}
+				distance={distance}
+				duration={duration}
+			/>
 		</div>
 	);
 }
