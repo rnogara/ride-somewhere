@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Heading from "../../ui/Heading";
 import { Driver } from "@/app/types/driver.type";
 import DriverCard from "./DriverCard";
+import { useRouter } from "next/navigation";
 
 type ConfirmBody = {
 	customer_id: string;
@@ -32,6 +33,7 @@ export default function Confirm({ customerId, origin, destination, distance, dur
 	const [driver, setDriver] = useState({ id: 0, name: "", value: 0 });
 	const [confirmed, setConfirmed] = useState(false);
 	const { handleSubmit } = useForm();
+	const router = useRouter();
 
 	const onSubmit = async () => {
 		const data: ConfirmBody = {
@@ -52,6 +54,7 @@ export default function Confirm({ customerId, origin, destination, distance, dur
 			}
 		}).then((res) => res.json()).catch((err) => console.log(err));
 		setConfirmed(true);
+		router.push("/#history");
 	};
 
 	return (

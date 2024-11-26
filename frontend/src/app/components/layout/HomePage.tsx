@@ -16,7 +16,7 @@ export default function HomePage() {
 		<div className="w-full flex flex-col items-center gap-10">
 			<Ride setOrigin={setOrigin} setDestination={setDestination} setOptions={setOptions} setCustomerId={setCustomerId} setDistance={setDistance} setDuration={setDuration} />
 			<Options origin={origin} destination={destination} options={options} customerId={customerId} distance={distance} duration={duration} />
-			<History customerId={customerId} />
+			<History />
 		</div>
 	);
 }

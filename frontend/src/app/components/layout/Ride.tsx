@@ -53,7 +53,7 @@ export default function Ride({ setOrigin, setDestination, setOptions, setCustome
 					{errors.customer_id && <span className="text-red-400 p-1">{errors.customer_id.message}</span>}
 				</div>
 				<div>
-					<Input {...register("origin")} type="text" placeholder="Origem" className="bg-transparent text-white  text-xl placeholder:text-xl p-4" />
+					<Input {...register("origin")} type="text" placeholder="Origem" className="bg-transparent text-white text-xl placeholder:text-xl p-4" />
 					{errors.origin && <span className="text-red-400 p-1">{errors.origin.message}</span>}
 				</div>
 				<div>
