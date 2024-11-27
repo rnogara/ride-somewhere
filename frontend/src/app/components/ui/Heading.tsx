@@ -19,6 +19,11 @@ export default function Heading({ level, className, children }: Props) {
 					{children}
 				</h2>
 			}
+			{level === 3 &&
+				<h3 className={cn(`${specialElite.className} text-white text-[1.5rem]`, className)}>
+					{children}
+				</h3>
+			}
 		</div>
 	);
 }

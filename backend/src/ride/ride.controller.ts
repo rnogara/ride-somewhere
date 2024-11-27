@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Res,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
@@ -20,7 +21,7 @@ export class RideController {
     private readonly driversService: DriversService,
   ) {}
 
-  @Post('confirm')
+  @Patch('confirm')
   async create(@Body() createRideDto: CreateRideDto, @Res() res: Response) {
     if (createRideDto.origin === createRideDto.destination) {
       return res.status(HttpStatus.BAD_REQUEST).json({
