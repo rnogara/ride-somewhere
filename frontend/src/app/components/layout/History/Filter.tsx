@@ -7,18 +7,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../ui/button";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 type Props = {
 	drivers: Driver[];
-	setCustomerId: (customerId: string) => void;
-	setDriverId: (driverId: number) => void;
+	setRides: (rides: []) => void;
 };
 
 const formSchema = z.object({
 	customerId: z.string().min(1, { message: "Por favor, insira um id" }),
 })
 
-export default function Filter({ drivers, setCustomerId, setDriverId }: Props) {
+export default function Filter({ drivers, setRides }: Props) {
 	const [selectedDriver, setSelectedDriver] = useState(0);
 	const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -26,12 +26,35 @@ export default function Filter({ drivers, setCustomerId, setDriverId }: Props) {
 	});
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		setCustomerId(data.customerId);
-		setDriverId(selectedDriver);
-	};
+		const url = selectedDriver !== 0 ? "http://localhost:8080/ride/" + data.customerId + "?driver_id=" + selectedDriver : "http://localhost:8080/ride/" + data.customerId;
+		try {
+			const response = await fetch(url);
+			if (!response.ok) {
+				const error = await response.json();
+				setRides([]);
+				throw new Error(response.status + ": " + error.error_description);
+			}
+			const responseJson = await response.json();
+			setRides(responseJson.rides);
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message, {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+			}
+		}
+	}
 
 	return (
 		<div>
+			<ToastContainer />
 			<form onSubmit={handleSubmit(onSubmit)} className="w-[80%] mx-auto h-fit p-5 rounded-lg flex gap-3">
 				<div>
 					<Input
