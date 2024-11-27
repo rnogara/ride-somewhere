@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function HistoryTable({ rides }: { rides: Ride[] }) {
+	console.log('Rides in HistoryTable:', rides);
 
 	const formatDateTimeWithLocale = (dateString: Date) => {
 		const date = new Date(dateString);

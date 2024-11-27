@@ -11,7 +11,8 @@ import { toast, ToastContainer } from "react-toastify";
 
 type Props = {
 	drivers: Driver[];
-	setRides: (rides: []) => void;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+	setRides: Function;
 };
 
 const formSchema = z.object({
@@ -26,6 +27,8 @@ export default function Filter({ drivers, setRides }: Props) {
 	});
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		console.log(selectedDriver, data.customerId);
+
 		const url = selectedDriver !== 0 ? "http://localhost:8080/ride/" + data.customerId + "?driver_id=" + selectedDriver : "http://localhost:8080/ride/" + data.customerId;
 		try {
 			const response = await fetch(url);
@@ -35,7 +38,9 @@ export default function Filter({ drivers, setRides }: Props) {
 				throw new Error(response.status + ": " + error.error_description);
 			}
 			const responseJson = await response.json();
-			setRides(responseJson.rides);
+			setRides([...responseJson.rides]);
+			console.log('Rides updated:', responseJson.rides);
+
 		} catch (error) {
 			if (error instanceof Error) {
 				toast.error(error.message, {
@@ -65,14 +70,14 @@ export default function Filter({ drivers, setRides }: Props) {
 					/>
 					{errors.customerId && <span className="text-red-400 p-1">{errors.customerId.message}</span>}
 				</div>
-				<Select>
+				<Select onValueChange={(value) => setSelectedDriver(parseInt(value))}>
 					<SelectTrigger className="text-white placeholder:text-white/60 placeholder:text-xl text-xl ">
 						<SelectValue placeholder="Selecione um motorista" />
 					</SelectTrigger>
 					<SelectContent className="bg-zinc-800 text-white">
-						<SelectItem value="Nenhum" onClick={() => setSelectedDriver(0)}>Nenhum</SelectItem>
+						<SelectItem value="0" onClick={() => setSelectedDriver(0)}>Nenhum</SelectItem>
 						{drivers.map((driver) => (
-							<SelectItem key={driver.id} value={driver.name} onClick={() => setSelectedDriver(driver.id)}>
+							<SelectItem key={driver.id} value={driver.id.toString()}>
 								{driver.name}
 							</SelectItem>
 						))}
