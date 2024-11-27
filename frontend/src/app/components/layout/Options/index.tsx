@@ -15,7 +15,6 @@ export default function Options({ origin, destination, options, customerId, dist
 	const destinationUrl = destination.replace(" ", "+");
 	const url = "https://www.google.com/maps/embed/v1/directions?key=" + process.env.NEXT_PUBLIC_GOOGLE_API_KEY + "&origin=" + originUrl + "&destination=" + destinationUrl;
 	return (
-
 		<div className="w-full flex flex-col items-center gap-10">
 			{origin.length > 0 && destination.length > 0 &&
 				<iframe

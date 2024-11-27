@@ -45,7 +45,12 @@ export class Ride {
   @IsPositive()
   driver_id: number;
 
-  @Column()
+  @Column('float', {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()

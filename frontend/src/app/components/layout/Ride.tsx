@@ -6,6 +6,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import React from "react";
 import Heading from "../ui/Heading";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
 	customer_id: z.string().min(1, { message: "Por favor, insira um id" }),
@@ -31,21 +32,51 @@ export default function Ride({ setOrigin, setDestination, setOptions, setCustome
 	});
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		const response = await fetch("http://localhost:8080/ride/estimate", {
-			method: "POST", body: JSON.stringify(data), headers: {
-				'Content-Type': 'application/json',
+		try {
+			const response = await fetch("http://localhost:8080/ride/estimate", {
+				method: "POST", body: JSON.stringify(data), headers: {
+					'Content-Type': 'application/json',
+				}
+			});
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(response.status + ": " + error.error_description);
 			}
-		}).then((res) => res.json()).catch((err) => console.log(err));
-		setOrigin(data.origin);
-		setDestination(data.destination);
-		setOptions(response.options);
-		setCustomerId(data.customer_id);
-		setDistance(response.distance);
-		setDuration(response.duration);
+			const responseJson = await response.json();
+			setOrigin(data.origin);
+			setDestination(data.destination);
+			setOptions(responseJson.options);
+			setCustomerId(data.customer_id);
+			setDistance(responseJson.distance);
+			setDuration(responseJson.duration);
+			toast.success("Viagem estimada com sucesso!", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+			})
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message, {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+			}
+		}
 	};
 
 	return (
-		<div className="w-[50%] mx-auto mt-30">
+		<div id="ride" className="w-[50%] mx-auto mt-44">
 			<Heading level={2} className="text-center">Solicite sua viagem</Heading>
 			<form onSubmit={handleSubmit(onSubmit)} className="w-full h-fit p-5 rounded-lg flex flex-col gap-3">
 				<div>

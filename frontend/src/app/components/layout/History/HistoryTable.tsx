@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import Heading from "../../ui/Heading";
 import 'react-toastify/dist/ReactToastify.css';
 
-
 type Props = {
 	customerId: string;
 	driverId: number;
@@ -19,18 +18,15 @@ export default function HistoryTable({ customerId, driverId }: Props) {
 			const url = driverId !== 0 ? "http://localhost:8080/ride/" + customerId + "?driver_id=" + driverId : "http://localhost:8080/ride/" + customerId;
 			try {
 				const response = await fetch(url);
-				console.log(response);
-
 				if (!response.ok) {
 					const error = await response.json();
+					setRides([]);
 					throw new Error(response.status + ": " + error.error_description);
 				}
 				const responseJson = await response.json();
-				return responseJson.rides;
+				setRides(responseJson.rides);
 			} catch (error) {
 				if (error instanceof Error) {
-					console.log(error);
-
 					toast.error(error.message, {
 						position: "top-right",
 						autoClose: 3000,
@@ -44,7 +40,7 @@ export default function HistoryTable({ customerId, driverId }: Props) {
 				}
 			}
 		}
-		history().then((rides) => setRides(rides));
+		history();
 	}, [customerId, driverId]);
 
 	const formatDateTimeWithLocale = (dateString: Date) => {

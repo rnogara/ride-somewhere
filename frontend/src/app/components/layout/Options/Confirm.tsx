@@ -6,6 +6,7 @@ import Heading from "../../ui/Heading";
 import { Driver } from "@/app/types/driver.type";
 import DriverCard from "./DriverCard";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 
 type ConfirmBody = {
 	customer_id: string;
@@ -48,22 +49,52 @@ export default function Confirm({ customerId, origin, destination, distance, dur
 			},
 			value: driver.value
 		}
-		await fetch("http://localhost:8080/ride/confirm", {
-			method: "POST", body: JSON.stringify(data), headers: {
-				'Content-Type': 'application/json',
+		try {
+			const response = await fetch("http://localhost:8080/ride/confirm", {
+				method: "PATCH", body: JSON.stringify(data), headers: {
+					'Content-Type': 'application/json',
+				}
+			});
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(response.status + ": " + error.error_description);
 			}
-		}).then((res) => res.json()).catch((err) => console.log(err));
+			toast.success("Viagem confirmada com sucesso!", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message, {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+			}
+		}
 		setConfirmed(true);
 		router.push("/#history");
 	};
 
 	return (
 		<div className="w-full mx-auto">
+			<ToastContainer />
 			{options.length > 0 && (
 				<>
 					<Heading level={2} className="text-center">Confirmar viagem</Heading>
 					<form onSubmit={handleSubmit(onSubmit)} className="w-full h-fit flex flex-col items-center rounded-lg gap-3">
-						<div className="w-full h-fit flex flex-nowrap justify-evenly px-3 py-5">
+						<div className="w-full h-fit flex flex-nowrap gap-6 px-6 py-5">
 							{options.length > 0 && options.map(
 								(option, index) => <div key={index}>
 									{
