@@ -52,11 +52,6 @@ export default function Ride({ setOrigin, setDestination, setOptions, setCustome
 			toast.success("Viagem estimada com sucesso!", {
 				position: "top-right",
 				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
 				theme: "dark",
 			})
 		} catch (error) {
@@ -64,11 +59,6 @@ export default function Ride({ setOrigin, setDestination, setOptions, setCustome
 				toast.error(error.message, {
 					position: "top-right",
 					autoClose: 3000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
 					theme: "dark",
 				});
 			}

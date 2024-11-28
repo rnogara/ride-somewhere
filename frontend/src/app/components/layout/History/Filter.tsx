@@ -46,11 +46,6 @@ export default function Filter({ drivers, setRides }: Props) {
 				toast.error(error.message, {
 					position: "top-right",
 					autoClose: 3000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
 					theme: "dark",
 				});
 			}
