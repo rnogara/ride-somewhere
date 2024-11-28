@@ -13,7 +13,7 @@ import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { Response } from 'express';
 import { EstimateRideDto } from './dto/estimate-ride.dto';
-import { DriversService } from 'src/drivers/drivers.service';
+import { DriversService } from '../drivers/drivers.service';
 @Controller('ride')
 export class RideController {
   constructor(

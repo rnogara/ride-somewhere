@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 import { DriversController } from './drivers.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Driver } from 'src/database/entities/driver.entity';
+import { Driver } from '../database/entities/driver.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Driver])],

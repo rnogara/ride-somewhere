@@ -62,11 +62,6 @@ export default function Confirm({ customerId, origin, destination, distance, dur
 			toast.success("Viagem confirmada com sucesso!", {
 				position: "top-right",
 				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
 				theme: "dark",
 			});
 		} catch (error) {
@@ -74,11 +69,6 @@ export default function Confirm({ customerId, origin, destination, distance, dur
 				toast.error(error.message, {
 					position: "top-right",
 					autoClose: 3000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
 					theme: "dark",
 				});
 			}

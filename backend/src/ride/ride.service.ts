@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Ride } from 'src/database/entities/ride.entity';
+import { Ride } from '../database/entities/ride.entity';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { EstimateResponseDto, EstimateRideDto } from './dto/estimate-ride.dto';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
-import { DriversService } from 'src/drivers/drivers.service';
+import { DriversService } from '../drivers/drivers.service';
 import { CustomerRidesResponseDto } from './dto/customer-rides.dto';
 
 @Injectable()

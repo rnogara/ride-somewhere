@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Driver } from 'src/database/entities/driver.entity';
+import { Driver } from '../database/entities/driver.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
