@@ -1,0 +1,51 @@
+networks:
+  app_network:
+    driver: bridge
+
+services:
+  frontend:
+    container_name: frontend  
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+    ports: 
+      - 80:80
+    working_dir: /app-frontend
+    depends_on:
+      - backend
+    networks:
+      - app_network
+    environment:
+      - NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY}
+  backend:
+    container_name: backend
+    build: ./backend
+    ports: 
+      - 8080:8080
+    working_dir: /app-backend
+    depends_on:
+      - db
+    networks:
+      - app_network
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+  db:
+    container_name: database
+    image: postgres:17.1-alpine3.20
+    restart: always
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "postgres"
+    ports:
+      - 5433:5432
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
